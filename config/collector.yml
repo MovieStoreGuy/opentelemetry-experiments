@@ -1,0 +1,81 @@
+---
+extensions:
+  pyroscope:
+    endpoint: http://pyroscope:4040
+    profiles:
+    - cpu
+    - alloc_objects
+    - alloc_space
+    - inuse_objects
+    - inuse_space    
+    - goroutines
+    - mutex_count
+    - mutex_duration
+    - block_count
+    - block_duration
+  health_check:
+    endpoint: 127.0.0.1:9098
+    path: /health/status
+    check_collector_pipeline:
+      enabled: true
+      interval: "1m"
+      exporter_failure_threshold: 5
+
+processors:
+  batch:
+    timeout: 1s
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+  jaeger:
+    protocols:
+      grpc:
+  prometheus/self:
+    config:
+      scrape_configs:
+      - job_name: 'otelcol'
+        scrape_interval: 1m
+        static_configs:
+        - targets: ['127.0.0.1:8888']
+
+exporters:
+  prometheus:
+    endpoint: ":8000"
+    send_timestamps: true
+    metric_expiration: 30s
+    enable_open_metrics: true
+    resource_to_telemetry_conversion:
+      enabled: true
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+  otlp/tempo:  
+    endpoint: http://tempo:4317
+    tls:
+      insecure: true
+service:
+  telemetry:
+    logs:
+      level: info
+      encoding: json
+      disable_stacktrace: false
+    metrics:
+      level: basic
+      address: 127.0.0.1:8888
+  extensions:
+    - pyroscope
+    - health_check
+  pipelines:
+    metrics:
+      receivers  : [otlp, prometheus/self]
+      processors : [batch]
+      exporters  : [prometheus]
+    traces:
+      receivers  : [otlp, jaeger]
+      processors : [batch]
+      exporters  : [otlp/tempo]
+    logs:
+      receivers  : [otlp]
+      processors : [batch]
+      exporters  : [loki]
