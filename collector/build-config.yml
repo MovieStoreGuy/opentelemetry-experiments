@@ -1,0 +1,18 @@
+---
+dist:
+  name: otelcol
+  description: "Experimental builds of the collector for own consumption and testing"
+  output_path: ./dist
+  version: v0.0.0-experimental
+extensions:
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension v0.75.0
+  - gomod: github.com/MovieStoreGuy/opentelemetry-experiments/collector/pyroscopeextension v0.0.0
+    path: ./pyroscopeextension
+receivers:
+  - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.75.0
+processors:
+  - gomod: go.opentelemetry.io/collector/processor/batchprocessor v0.75.0
+exporters:
+  - gomod: go.opentelemetry.io/collector/exporter/otlpexporter v0.75.0
+  - gomod: go.opentelemetry.io/collector/exporter/otlphttpexporter v0.75.0
+

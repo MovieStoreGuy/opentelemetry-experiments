@@ -1,0 +1,32 @@
+---
+pyroscope/min-values:
+  endpoint: "http://pyroscope-server:4040"
+pyroscope/all-values:
+  endpoint  : "http://pyroscope-server:4040"
+  auth_token: "mycloudtoken" # Only required when using pyroscope cloud
+  application_name: "open-telemetry collector"
+  tags:
+    service.name: "opentelemetry-demo"
+    service.version: "v1.0.4"
+    deployment.environment: "test"
+  runtime_mutex_fraction: 5
+  runtime_block_fraction: 5
+  profiles:
+  - cpu
+  - alloc_objects
+  - alloc_space
+  - inuse_objects
+  - inuse_space
+  - goroutines
+  - mutex_count
+  - mutex_duration
+  - block_count
+  - block_duration
+pyroscope/missing-endpoint:
+pyroscope/negative-runtime-fractions:
+  endpoint : "http://pyroscope-server:4040"
+  runtime_block_fraction: -1
+  runtime_mutex_fraction: -1
+pyroscope/invalid-profile:
+  endpoint : "http://pyroscope-server:4040"
+  profiles: [ "*" ]
