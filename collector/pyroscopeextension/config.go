@@ -19,7 +19,7 @@ var (
 
 type Config struct {
 	RuntimeMutexProfileFraction int `mapstructure:"runtime_mutex_fraction"`
-	RuntimeBlockProfileFaction  int `mapstructure:"runtime_block_fraction"`
+	RuntimeBlockProfileFraction int `mapstructure:"runtime_block_fraction"`
 	// Endpoint is server address to forward data to from the collector
 	Endpoint string `mapstructure:"endpoint"`
 	// AuthToken is used to provide authentication for the pyroscope server
@@ -72,7 +72,7 @@ var (
 )
 
 func (c *Config) Validate() (errs error) {
-	if c.RuntimeBlockProfileFaction < 1 {
+	if c.RuntimeBlockProfileFraction < 1 {
 		errs = multierr.Append(
 			errs,
 			fmt.Errorf("runtime block profile fraction: %w", ErrRequiresPositiveValue),

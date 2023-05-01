@@ -44,7 +44,7 @@ func (py *pyrofiler) Start(ctx context.Context, host component.Host) error {
 		return ErrAlreadyStarted
 	}
 
-	runtime.SetBlockProfileRate(py.conf.RuntimeBlockProfileFaction)
+	runtime.SetBlockProfileRate(py.conf.RuntimeBlockProfileFraction)
 	runtime.SetMutexProfileFraction(py.conf.RuntimeMutexProfileFraction)
 
 	p, err := pyroscope.Start(pyroscope.Config{

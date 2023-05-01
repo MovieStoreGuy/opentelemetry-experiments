@@ -28,4 +28,3 @@ LABEL Maintainer="Sean (MovieStoreGuy) Marciniak"
 COPY --from=collector-builder /src/dist/otelcol /otelcol
 
 ENTRYPOINT [ "/otelcol" ]
-      

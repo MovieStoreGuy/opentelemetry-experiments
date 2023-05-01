@@ -30,7 +30,7 @@ func TestConfigLoaded(t *testing.T) {
 			id: component.NewIDWithName(typeStr, "min-values"),
 			expect: &Config{
 				RuntimeMutexProfileFraction: 5,
-				RuntimeBlockProfileFaction:  5,
+				RuntimeBlockProfileFraction: 5,
 				Endpoint:                    "http://pyroscope-server:4040",
 				ApplicationName:             "open-telemetry-collector",
 				Profiles:                    pyroscope.DefaultProfileTypes,
@@ -41,7 +41,7 @@ func TestConfigLoaded(t *testing.T) {
 			id: component.NewIDWithName(typeStr, "all-values"),
 			expect: &Config{
 				RuntimeMutexProfileFraction: 5,
-				RuntimeBlockProfileFaction:  5,
+				RuntimeBlockProfileFraction: 5,
 				Endpoint:                    "http://pyroscope-server:4040",
 				AuthToken:                   "mycloudtoken",
 				ApplicationName:             "open-telemetry collector",
@@ -73,7 +73,7 @@ func TestConfigLoaded(t *testing.T) {
 			id: component.NewIDWithName(typeStr, "negative-runtime-fractions"),
 			expect: &Config{
 				RuntimeMutexProfileFraction: -1,
-				RuntimeBlockProfileFaction:  -1,
+				RuntimeBlockProfileFraction: -1,
 				Endpoint:                    "http://pyroscope-server:4040",
 				ApplicationName:             "open-telemetry-collector",
 				Profiles:                    pyroscope.DefaultProfileTypes,
@@ -84,7 +84,7 @@ func TestConfigLoaded(t *testing.T) {
 			id: component.NewIDWithName(typeStr, "invalid-profile"),
 			expect: &Config{
 				RuntimeMutexProfileFraction: 5,
-				RuntimeBlockProfileFaction:  5,
+				RuntimeBlockProfileFraction: 5,
 				Endpoint:                    "http://pyroscope-server:4040",
 				ApplicationName:             "open-telemetry-collector",
 				Profiles:                    []pyroscope.ProfileType{"*"},

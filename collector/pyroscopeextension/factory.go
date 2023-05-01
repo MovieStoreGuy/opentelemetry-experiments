@@ -23,7 +23,7 @@ func NewFactory() extension.Factory {
 func newDefaultConfig() component.Config {
 	return &Config{
 		RuntimeMutexProfileFraction: 5,
-		RuntimeBlockProfileFaction:  5,
+		RuntimeBlockProfileFraction: 5,
 		ApplicationName:             "open-telemetry-collector",
 		Profiles: append(
 			[]pyroscope.ProfileType{},
