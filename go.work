@@ -1,3 +1,6 @@
 go 1.20
 
-use ./collector/pyroscopeextension
+use (
+	./collector/cicdreceiver
+	./collector/pyroscopeextension
+)
