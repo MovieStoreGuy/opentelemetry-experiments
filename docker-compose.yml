@@ -23,9 +23,14 @@ services:
       - 8000
     depends_on:
     - pyroscope
-    - prometheus
-    - loki
-    - tempo
+    - jenkins
+  jenkins:
+    image: jenkins/jenkins:2.401.2
+    container_name: jenkins
+    ports:
+    - 8080:8080
+    volumes:
+      - jenkins-data:/var/jenkins_home
   pyroscope:
     image: pyroscope/pyroscope:0.37.2
     container_name: pyroscope
@@ -36,47 +41,6 @@ services:
       - "pyrscope-data:/var/lib/pyroscope"
     command:
     - server
-  prometheus:
-    image: prom/prometheus:v2.43.0
-    container_name: prometheus
-    restart: on-failure
-    expose:
-      - 9090
-    volumes:
-      - prometheus-data:/prometheus
-      - ./config/prometheus.yml:/etc/prometheus.yml:ro
-    command:
-    - --config.file=/etc/prometheus.yml
-    - --web.enable-remote-write-receiver
-    - --enable-feature=exemplar-storage
-    - --enable-feature=native-histograms
-  grafana:
-    image: grafana/grafana-oss:9.5.1
-    container_name: grafana
-    ports:
-      - 3000:3000
-    volumes:
-      - grafana-data:/var/lib/grafana
-  loki:
-    image: grafana/loki:2.8.1
-    container_name: loki
-    expose:
-      - 3100
-    volumes:
-      - loki-data:/loki
-  tempo:
-    image: grafana/tempo:2.1.1
-    container_name: tempo
-    expose:
-      - 3200 # Service Port
-      - 4317 # Ingestion Port
-    volumes:
-      - tempo-data:/tmp/tempo
-      - ./config/tempo.yml:/etc/tempo.yml:ro
-    command:
-    - "--config.file=/etc/tempo.yml"
-    
-    
     
 volumes:
   pyrscope-data:
@@ -104,6 +68,12 @@ volumes:
       device: "tmpfs"
       o: size=5000m
   tempo-data:
+    driver: local
+    driver_opts:
+      type: "tmpfs"
+      device: "tmpfs"
+      o: size=5000m
+  jenkins-data:
     driver: local
     driver_opts:
       type: "tmpfs"

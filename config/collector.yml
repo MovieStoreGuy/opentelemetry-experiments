@@ -20,6 +20,11 @@ extensions:
       enabled: true
       interval: "1m"
       exporter_failure_threshold: 5
+  
+  basicauth/jenkins:
+    client_auth:
+      username: admin
+      password: 110a7d1fe11c16c3807e4e2c2ff71a36be
 
 processors:
   batch:
@@ -39,21 +44,14 @@ receivers:
         scrape_interval: 1m
         static_configs:
         - targets: ['127.0.0.1:8888']
+  jenkins:
+    endpoint: http://jenkins:8080
+    auth:
+      authenticator: basicauth/jenkins
 
 exporters:
-  prometheus:
-    endpoint: ":8000"
-    send_timestamps: true
-    metric_expiration: 30s
-    enable_open_metrics: true
-    resource_to_telemetry_conversion:
-      enabled: true
-  loki:
-    endpoint: http://loki:3100/loki/api/v1/push
-  otlp/tempo:  
-    endpoint: http://tempo:4317
-    tls:
-      insecure: true
+  logging:
+    verbosity: detailed
 service:
   telemetry:
     logs:
@@ -66,16 +64,17 @@ service:
   extensions:
     - pyroscope
     - health_check
+    - basicauth/jenkins
   pipelines:
     metrics:
-      receivers  : [otlp, prometheus/self]
+      receivers  : [jenkins]
       processors : [batch]
-      exporters  : [prometheus]
+      exporters  : [logging]
     traces:
       receivers  : [otlp, jaeger]
       processors : [batch]
-      exporters  : [otlp/tempo]
+      exporters  : [logging]
     logs:
       receivers  : [otlp]
       processors : [batch]
-      exporters  : [loki]
+      exporters  : [logging]

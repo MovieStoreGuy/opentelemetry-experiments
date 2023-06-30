@@ -1,6 +1,6 @@
 # Builder Base will contain all the required tooling in order to build
 # A custom distrobution of the collector and allow for caching.
-FROM golang:1.20.3 AS builder-base
+FROM golang:1.20.5 AS builder-base
 
 RUN go install go.opentelemetry.io/collector/cmd/builder@latest
 
@@ -21,7 +21,7 @@ RUN builder --config=build-config.yml
 # For components that require additional packages being installed such
 # as javametricsreceiver or collectd, then additional efforts are required
 # in order to get those packages installed.
-FROM gcr.io/distroless/static-debian11:nonroot AS final
+FROM gcr.io/distroless/static:nonroot AS final
 
 LABEL Maintainer="Sean (MovieStoreGuy) Marciniak"
 
